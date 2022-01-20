@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://konui.github.io</id>
     <title>Gridea</title>
-    <updated>2022-01-20T06:13:31.254Z</updated>
+    <updated>2022-01-20T07:01:53.214Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://konui.github.io"/>
     <link rel="self" href="https://konui.github.io/atom.xml"/>
@@ -10,6 +10,666 @@
     <logo>https://konui.github.io/images/avatar.png</logo>
     <icon>https://konui.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[Aerospike Java client端常用API]]></title>
+        <id>https://konui.github.io/post/aerospike-java-client-duan-chang-yong-api/</id>
+        <link href="https://konui.github.io/post/aerospike-java-client-duan-chang-yong-api/">
+        </link>
+        <updated>2022-01-20T06:15:01.000Z</updated>
+        <summary type="html"><![CDATA[<p>用简单的java代码示例去示范Aerospike常用Api操作。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>用简单的java代码示例去示范Aerospike常用Api操作。</p>
+<!-- more -->
+<p>该文档基于以下maven依赖，根据as的官方文档以及依赖中的源码注释整理，只列出常用的操作及策略配置，只涉及功能相关，暂不涉及性能调优。下文代码中client如非特别说明即是同步客户端初始化的对象，其他代码直接使用client，不再重复初始化过程。</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.aerospike&lt;/groupId&gt;
+    &lt;artifactId&gt;aerospike-client&lt;/artifactId&gt;
+    &lt;version&gt;4.1.11&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="客户端">客户端</h2>
+<h3 id="同步客户端初始化">同步客户端初始化</h3>
+<pre><code class="language-java">Host hosts = new Host(&quot;47.98.237.128&quot;,3000);
+AerospikeClient client = new AerospikeClient(null,hosts);
+</code></pre>
+<h3 id="异步客户端初始化">异步客户端初始化</h3>
+<p>异步客户端需要在初始化时指定ClientPolicy中的eventLoops属性。</p>
+<pre><code class="language-java">ClientPolicy clientPolicy = new ClientPolicy();
+ 
+EventPolicy eventPolicy = new EventPolicy();
+eventLoops = new NioEventLoops(eventPolicy,4);
+ 
+clientPolicy.eventLoops = eventLoops;
+ 
+Host hosts = new Host(&quot;47.98.237.128&quot;,3000);
+AerospikeClient client = new AerospikeClient(clientPolicy,hosts);
+</code></pre>
+<h2 id="更新操作">更新操作</h2>
+<p>as中bin支持的基本类型有String、byte、byte[]、int、long、double、float、boolean，复杂类型有List、Map、Object。<br>
+其中写入对应类型后，再在java中读取后，byte、int、long、boolean类型会被转换为java的Long对象；float、double会被转为java的Double对象；创建bin的时候可以直接传入对应类型，也可以用Value.get(T t)传入bin值。<br>
+其中namespace类似mysql中数据库，set类似mysql中的表，key对应mysql中表的一行记录，bin则类似mysql中一行记录中的一个属性。</p>
+<h3 id="普通类型写入">普通类型写入</h3>
+<pre><code class="language-java">//指定写入的key，参数含义依次为:[命名空间的名称]、[set的名称]、[key]
+Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;key&quot;);
+ 
+//只列出String类型的操作，其他基本类型与此类似，不再重复
+//存储一个String类型,bin的构造参数含义依次为:[bin名称]、[bin的值]
+Bin strBin = new Bin(&quot;strBin&quot;,&quot;writeStr&quot;);
+//与上方代码同效
+Bin strBin1 = new Bin(&quot;strBin1&quot;,Value.get(&quot;writeStr&quot;));
+ 
+//参数含义依次为:[写入策略]、[key]、...[bin]
+client.put(null,key,strBin,strBin1);
+ 
+//获取结果
+Record record = client.get(null,key);
+System.out.println(record.toString());
+//(gen:1),(exp:355197645),(bins:(strBin:writeStr),(strBin1:writeStr))
+</code></pre>
+<h3 id="复杂类型写入">复杂类型写入</h3>
+<pre><code class="language-java">List&lt;String&gt; list = new ArrayList&lt;&gt;();
+list.add(&quot;a1&quot;);
+list.add(&quot;b2&quot;);
+list.add(&quot;c3&quot;);
+ 
+Map&lt;String,String&gt; map = new HashMap&lt;&gt;();
+map.put(&quot;a&quot;,&quot;11&quot;);
+map.put(&quot;b&quot;,&quot;22&quot;);
+map.put(&quot;c&quot;,&quot;33&quot;);
+ 
+Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;listAndMap&quot;);
+Bin listBin = new Bin(&quot;listBin&quot;,list);
+//Bin listBin1 = new Bin(&quot;listBin&quot;,Value.get(list));  //与上方代码同效
+Bin mapBin = new Bin(&quot;mapBin&quot;,map);
+//Bin mapBin1 = new Bin(&quot;mapBin&quot;,Value.get(map));   //与上方代码同效
+ 
+client.put(null,key,listBin,mapBin);
+ 
+//获取结果
+Record record = client.get(null,key);
+System.out.println(record.toString());
+//(gen:1),(exp:355197723),(bins:(mapBin:{a=11, b=22, c=33}),(listBin:[a1, b2, c3]))
+</code></pre>
+<h3 id="使用写入策略">使用写入策略</h3>
+<p>写入策略的具体配置见常用策略配置段落。<br>
+<em>写入策略-过期时间</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;writePolicy&quot;);
+Bin bin = new Bin(&quot;testBin&quot;,&quot;test&quot;);
+ 
+WritePolicy writePolicy = new WritePolicy();
+//设置10s后过期
+writePolicy.expiration=10;
+//设置仅创建记录，如果记录存在则会抛异常
+writePolicy.recordExistsAction = RecordExistsAction.CREATE_ONLY;
+ 
+client.put(writePolicy,key,bin);
+ 
+//获取结果
+Record record = client.get(null,key);
+System.out.println(record.toString());
+System.out.println(record.getTimeToLive());
+//(gen:1),(exp:352605790),(bins:(testBin:test))
+//10
+</code></pre>
+<p><em>写入策略-版本</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;test&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,0);
+ 
+client.put(null,key,bin);
+ 
+Record record = client.get(null,key);
+System.out.println(record.toString());
+//(gen:1),(exp:367148323),(bins:(DATA:0))
+ 
+WritePolicy writePolicy = new WritePolicy();
+writePolicy.generation = record.generation;
+writePolicy.generationPolicy = GenerationPolicy.EXPECT_GEN_EQUAL;
+ 
+client.put(writePolicy,key,bin);
+Record record1 = client.get(null,key);
+System.out.println(record1.toString());
+//(gen:2),(exp:367148323),(bins:(DATA:0))
+ 
+client.put(writePolicy,key,bin);
+Record record2 = client.get(null,key);
+System.out.println(record2.toString());
+//Exception in thread &quot;main&quot; com.aerospike.client.AerospikeException: Error Code 3: Generation error
+</code></pre>
+<h3 id="异步写入">异步写入</h3>
+<pre><code class="language-java">//不能直接使用同步的client，初始化一个异步的client
+//创建EventLoops
+EventPolicy eventPolicy = new EventPolicy();
+EventLoops eventLoops = new NioEventLoops(eventPolicy,4);
+ 
+//初始化异步as客户端需要指定EventLoops
+ClientPolicy clientPolicy = new ClientPolicy();
+clientPolicy.eventLoops=eventLoops;
+ 
+AerospikeClient aerospikeClient = new AerospikeClient(clientPolicy,&quot;47.98.237.128&quot;,3000);
+ 
+ 
+//开始准备异步写入
+EventLoop eventLoop = eventLoops.next();
+ 
+WriteListener writeListener = new WriteListener() {
+    @Override
+    public void onSuccess(Key key) {
+        System.out.println(&quot;写入成功&quot;);
+        System.out.println(key.toString());
+    }
+     
+    @Override
+    public void onFailure(AerospikeException exception) {
+        System.out.println(&quot;写入异常&quot;);
+        System.out.println(exception.toString());
+    }
+};
+Key key = new Key(&quot;ns1&quot;,&quot;test_async&quot;);
+Bin bin = new Bin(&quot;test&quot;,&quot;test_async&quot;);
+aerospikeClient.put(eventLoop, writeListener,null,key,bin);
+ 
+TimeUnit.SECONDS.sleep(5);
+ 
+client.close();
+eventLoops.close();
+</code></pre>
+<h3 id="对整数类型bin直接操作">对整数类型bin直接操作</h3>
+<p>该操作会把add方法参数中，bin名相同的加到服务器中的bin值中。add方法只能操作整数类型。<br>
+add方法中的所有bin对应服务器中的类型必须为整数类型， 如果有一个bin不为整数类型会抛出异常。<br>
+add中可含有其他类型bin，必须服务器中不存在该bin才可正常写入。<br>
+<em>add操作</em></p>
+<pre><code class="language-java">//在”DATA“的bin值加1，在”tt“的bin值加2
+Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;123&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,1);
+Bin bbin = new Bin(&quot;tt&quot;,2);
+client.add(null,key,bin,bbin);
+ 
+//获取结果
+Record record = client.get(null,key);
+System.out.println(record.toString());
+//(gen:1),(exp:355197871),(bins:(tt:2),(DATA:1))
+//再次执行
+//(gen:2),(exp:355197949),(bins:(tt:4),(DATA:2))
+</code></pre>
+<h3 id="对字符类型直接操作">对字符类型直接操作</h3>
+<p>对字符串操作与整数操作类似，对应的方法中所有的bin，在as服务器中必须对字符串类型，否则会抛出异常，可以带其他类型的bin参数，必须保证该bin在as服务器中不存在。</p>
+<ol>
+<li>对字符串末尾追加操作<br>
+<em>字符串增加后缀</em></li>
+</ol>
+<pre><code class="language-java">//在”DATA“的bin值加1，在”tt“的bin值加2
+Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;strTest&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,&quot;2&quot;);
+Bin bbin = new Bin(&quot;tt&quot;,&quot;b&quot;);
+client.append(null,key,bin,bbin);
+ 
+//获取结果
+Record record = client.get(null,key);
+System.out.println(record.toString());
+//(gen:1),(exp:355197986),(bins:(tt:b),(DATA:2))
+//将bin的值改为3，bbin的值改为c，再次执行
+//(gen:2),(exp:355198039),(bins:(tt:bc),(DATA:23))
+</code></pre>
+<ol>
+<li>对字符串头部插入操作<br>
+<em>字符串增加前缀</em></li>
+</ol>
+<pre><code class="language-java">//在”DATA“的bin值前追加'-'，在”tt”的bin值前追加'-'
+Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;strTest&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,&quot;-&quot;);
+Bin bbin = new Bin(&quot;tt&quot;,&quot;-&quot;);
+client.prepend(null,key,bin,bbin);
+ 
+//获取结果
+Record record = client.get(null,key);
+System.out.println(record.toString());
+//再追加key的操作后，执行本操作结果为
+//(gen:3),(exp:355198133),(bins:(tt:-bc),(DATA:-23))
+</code></pre>
+<h3 id="touch操作">touch操作</h3>
+<p>用新的写策略更新记录。<br>
+<em>touch更新过期时间</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;123&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,&quot;testValue&quot;);
+ 
+WritePolicy writePolicy = new WritePolicy();
+writePolicy.expiration=1000;
+ 
+client.put(writePolicy,key,bin);
+ 
+Record record = client.get(null,key);
+System.out.println(record.toString());
+System.out.println(record.getTimeToLive());
+//(gen:1),(exp:354107415),(bins:(DATA:testValue))
+//1000
+ 
+writePolicy.expiration=100;
+client.touch(writePolicy,key);
+ 
+Record record1 = client.get(null,key);
+System.out.println(record1.toString());
+System.out.println(record1.getTimeToLive());
+//(gen:2),(exp:354106515),(bins:(DATA:testValue))
+//100
+</code></pre>
+<h3 id="operation操作">Operation操作</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operation.get()</td>
+<td>获取全部bin，一个AsClient.operate()中只能有一个get()，且不能有其他get(String binName)否则会抛异常</td>
+</tr>
+<tr>
+<td>Operation.get(String binName)</td>
+<td>获取单个bin，一个AsClient.operate()中可以有多个get(String binName)</td>
+</tr>
+<tr>
+<td>Operation.getHeader()</td>
+<td>只获取除bin外信息</td>
+</tr>
+<tr>
+<td>Operation.put(Bin bin)</td>
+<td>与AsClient同名方法类似</td>
+</tr>
+<tr>
+<td>Operation.append(Bin bin)</td>
+<td>与AsClient同名方法类似</td>
+</tr>
+<tr>
+<td>Operation.prepend(Bin bin)</td>
+<td>与AsClient同名方法类似</td>
+</tr>
+<tr>
+<td>Operation.add(Bin bin)</td>
+<td>与AsClient同名方法类似</td>
+</tr>
+<tr>
+<td>Operation.touch()</td>
+<td>touch，一般用于更新过期时间</td>
+</tr>
+</tbody>
+</table>
+<p><em>touch更新过期时间</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;12345&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,1);
+WritePolicy policy = new WritePolicy();
+policy.expiration=100;
+client.put(policy,key,bin);
+Record record = client.get(null,key);
+System.out.println(record.getTimeToLive());
+//100
+//更新记录的过期时间，以传入的WritePolicy为准，当前操作传入null则为client中设置的默认写入策略
+client.operate(null,key, Operation.touch());
+Record record1 = client.get(null,key);
+System.out.println(record1.getTimeToLive());
+//2592000
+</code></pre>
+<p><em>get演示</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;operationTest&quot;);
+ 
+Bin bin = new Bin(&quot;Test&quot;,123);
+Bin t = new Bin(&quot;a&quot;,&quot;test&quot;);
+//先放入t，然后获取当前key的record，再放入bin，并再加一个bin
+Record record = client.operate(null,key,Operation.put(t),Operation.get(),Operation.put(bin),Operation.add(bin));
+//打印的结果中只包含t对应的bin
+System.out.println(record.toString());
+//(gen:1),(exp:355198995),(bins:(a:test))
+//获取完整结果
+Record record1 = client.get(null,key);
+System.out.println(record1.toString());
+//(gen:1),(exp:355198995),(bins:(a:test),(Test:246))
+</code></pre>
+<p><em>get(binName)演示</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;operationTest&quot;);
+ 
+Bin bin = new Bin(&quot;Test&quot;,123);
+Bin t = new Bin(&quot;a&quot;,&quot;test&quot;);
+Record record = client.operate(null,key,Operation.put(t),Operation.get(&quot;a&quot;),Operation.put(bin),Operation.get(&quot;Test&quot;),Operation.add(bin));
+ 
+//输出结果为：包含t，以及Test未自加前的record
+System.out.println(record.toString());
+//(gen:1),(exp:355199080),(bins:(a:test),(Test:123))
+//获取完整结果
+Record record1 = client.get(null,key);
+System.out.println(record1.toString());
+//(gen:1),(exp:355199080),(bins:(a:test),(Test:246))
+</code></pre>
+<h3 id="listoperation操作">ListOperation操作</h3>
+<p>可以直接操作类型为list的bin。支持负索引，即从末尾开始操作。（index 0）为第一项，（index -1）为倒数第一项。（index 1 ,count 2）为第二和第三项，（index -5 ,count 4）为从倒数第二，第三，第四，第五项。<br>
+如果索引超出列表范围将抛出异常；如果范围部分超出列表范围，则返回有效部分。</p>
+<h4 id="listreturntype">ListReturnType</h4>
+<p>部分方法需要传入标志返回类型的参数。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ListReturnType.NONE</td>
+<td>不返回任何结果</td>
+</tr>
+<tr>
+<td>ListReturnType.INVERTED</td>
+<td>反选范围，与其他返回类型或连接</td>
+</tr>
+<tr>
+<td>ListReturnType.REVERSE_RANK</td>
+<td>按照排序后的反序索引返回</td>
+</tr>
+<tr>
+<td>ListReturnType.RANK</td>
+<td>按照排序后的顺序索引返回</td>
+</tr>
+<tr>
+<td>ListReturnType.REVERSE_INDEX</td>
+<td>按照索引偏移的反序返回</td>
+</tr>
+<tr>
+<td>ListReturnType.INDEX</td>
+<td>按照索引偏移的顺序返回</td>
+</tr>
+<tr>
+<td>ListReturnType.VALUE</td>
+<td>返回值</td>
+</tr>
+<tr>
+<td>ListReturnType.COUNT</td>
+<td>返回所选的数量</td>
+</tr>
+</tbody>
+</table>
+<h4 id="查询相关方法">查询相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ListOperation.get(String binName,int index)</td>
+<td>获取指定索引位置的元素</td>
+</tr>
+<tr>
+<td>ListOperation.getByIndex(String binName,int index,int returnType)</td>
+<td>返回指定索引元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByIndexRange(String binName,int index,int count,int returnType)</td>
+<td>返回从指定索引开始count个元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByIndexRange(String binName,int index,int returnType)</td>
+<td>返回指定索引至末尾元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByRank(String binName,int rank,int returnType)</td>
+<td>返回按照元素大小排序后排行第rank个元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByRankRange(String binName,int rank,int count,int returnType)</td>
+<td>返回按照元素大小排序后排行第rank个开始count个元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByRankRange(String binName,int rank,int returnType)</td>
+<td>返回按照元素大小排序后排行第rank个至末尾元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByValue(String binName,Value value,int returnType)</td>
+<td>按照与传入的value相等的元素，返回对应的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByValueList(String binName,List<Value> values,int returnType)</td>
+<td>按照传入的valueList，返回对应的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByValueRange(String binName,Value valueBegin,Value valueEnd,int returnType)</td>
+<td>按照指定value范围内(包含头，不包含尾)的元素，返回对应的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByValueRelativeRankRange(String binName,Value value,int rank,int count,int returnType)</td>
+<td>先对list排序(不影响原顺序)，然后从传入value最近的值开始排行第rank个开始count个元素，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getByValueRelativeRankRange(String binName,Value value,int rank,int returnType)</td>
+<td>先对list排序(不影响原顺序)，然后从传入value最近的值开始排行第rank个直至末尾，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.getRange(String binName,int index)</td>
+<td>获取指定索引开始到末尾元素</td>
+</tr>
+<tr>
+<td>ListOperation.getRange(String binName,int index,int count)</td>
+<td>获取指定索引开始往后count个元素</td>
+</tr>
+<tr>
+<td>ListOperation.size(String binName)</td>
+<td>返回list的大小</td>
+</tr>
+</tbody>
+</table>
+<h4 id="更新相关方法">更新相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ListOperation.set(String binName,int index,Value value)</td>
+<td>将对应索引位置的元素设置为指定值</td>
+</tr>
+<tr>
+<td>ListOperation.set(ListPolicy policy,String binName,int index,Value value)</td>
+<td>更加ListPolicy将对应索引位置的元素设置为指定值</td>
+</tr>
+<tr>
+<td>ListOperation.append(String binName,Value value)</td>
+<td>对指定的list类型bin末尾追加元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.append(ListPolicy policy,String binName,Value value)</td>
+<td>根据ListPolicy对指定的list类型末尾追加元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.appendItems(String binName,List<Value> list)</td>
+<td>对指定的list类型bin末尾追加多个元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.appendItems(ListPolicy policy,String binName,List<Value> list)</td>
+<td>根据ListPolicy对指定的list类型末尾追加多个元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.insert(String binName,int index,Value value)</td>
+<td>在对应bin的指定位置插入元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.insert(ListPolicy policy,String binName,int index,Value value)</td>
+<td>根据ListPolicy在对应bin的指定位置插入元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.insertItems(String binName,int index,List<Value> list)</td>
+<td>在对应bin的指定位置插入多个元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.insertItems(ListPolicy policy,String binName,int index,List<Value> list)</td>
+<td>根据ListPolicy在对应bin的指定位置插入元素，并返回长度。</td>
+</tr>
+<tr>
+<td>ListOperation.increment(String binName,int index)</td>
+<td>对指定位置的元素递增1，并返回增长后的值</td>
+</tr>
+<tr>
+<td>ListOperation.increment(ListPolicy policy,String binName,int index)</td>
+<td>使用ListPocliy在指定位置的元素递增1，并返回增长后的值</td>
+</tr>
+<tr>
+<td>ListOperation.increment(String binName,int index,Value value)</td>
+<td>对指定位置的元素增加传入的值，并返回增长后的值，操作类型必须为数字</td>
+</tr>
+<tr>
+<td>ListOperation.increment(ListPolicy policy,String binName,int index,Value value)</td>
+<td>使用ListPocliy对指定位置的元素增加传入的值，并返回增长后的值，操作类型必须为数字</td>
+</tr>
+</tbody>
+</table>
+<h4 id="删除相关方法">删除相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ListOperation.pop(String binName,int index)</td>
+<td>将指定位置的元素出列，在bin中删除该元素并返回该元素</td>
+</tr>
+<tr>
+<td>ListOperation.popRange(String binName,int index,int count)</td>
+<td>指定下边开始根据count依次出列，返回出列元素</td>
+</tr>
+<tr>
+<td>ListOperation.popRange(String binName,int index)</td>
+<td>从指定位置开始直至末尾全部出列，返回出列元素</td>
+</tr>
+<tr>
+<td>ListOperation.remove(String binName,int index)</td>
+<td>删除指定索引位置的元素，并返回删除的个数</td>
+</tr>
+<tr>
+<td>ListOperation.removeRange(String binName,int index,int count)</td>
+<td>从指定索引开始依次删除count个数的元素，并返回删除的个数</td>
+</tr>
+<tr>
+<td>ListOperation.removeRange(String binName,int index)</td>
+<td>删除指定索引到末尾的元素，返回删除的个数</td>
+</tr>
+<tr>
+<td>ListOperation.trim(String binName,int index,int count)</td>
+<td>保留指定索引之后count个元素，其余全部删除，返回删除的个数</td>
+</tr>
+<tr>
+<td>ListOperation.clear(String binName)</td>
+<td>清空对应bin，默认不返回结果</td>
+</tr>
+<tr>
+<td>ListOperation.removeByValue(String binName,Value value,int returnType)</td>
+<td>删除指定值的元素，并根据returnType返回</td>
+</tr>
+<tr>
+<td>ListOperation.removeByValueList(String binName,List<Value> values,int returnType)</td>
+<td>批量删除指定值的元素，并根据returnType返回</td>
+</tr>
+<tr>
+<td>ListOperation.removeByValueRange(String binName,Value valueBegin,Value valueEnd,int returnType)</td>
+<td>删除指定开始值与结束值之间的元素(含头不含尾)，并根据returnType返回</td>
+</tr>
+<tr>
+<td>ListOperation.removeByValueRelativeRankRange(String binName,Value value,int rank,int returnType)</td>
+<td>先对list排序，然后删除传入value最近的值开始排行第rank个直至末尾，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByValueRelativeRankRange(String binName,Value value,int rank,int count,int returnType)</td>
+<td>先对list排序，然后删除传入value最近的值开始排行第rank个开始count个元素，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByIndex(String binName,int index,int returnType)</td>
+<td>删除指定索引的元素，并返回returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByIndexRange(String binName,int index,int returnType)</td>
+<td>删除指定索引至末尾的元素，并返回returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByIndexRange(String binName,int index,int count,int returnType)</td>
+<td>删除指定索引后count个元素，并返回returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByRank(String binName,int rank,int returnType)</td>
+<td>删除根据元素大小排序后第rank个元素，并返回returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByRankRange(String binName,int rank,int returnType)</td>
+<td>删除根据元素大小排序后第rank个至最后的元素，并返回returnType数据</td>
+</tr>
+<tr>
+<td>ListOperation.removeByRankRange(String binName,int rank,int count,int returnType)</td>
+<td>删除根据元素大小排序后第rank个后count个元素，并返回returnType数据</td>
+</tr>
+</tbody>
+</table>
+<h4 id="排序相关方法">排序相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ListOperation.setOrder(String binName,ListOrder order)</td>
+<td>对指定的list类型bin进行排序，返回null。order可选参数：ListOrder.ORDERED（排序）、ListOrder.UNORDERED（未排序，默认）</td>
+</tr>
+<tr>
+<td>ListOperation.sort(String binName,int sortFlags)</td>
+<td>对指定的list类型bin进行排序，默认不返回结果。sortFlags可选参数：ListSortFlags.DEFAULT（保留重复值）、ListSortFlags.DROP_DUPLICATES（去除重复值）</td>
+</tr>
+</tbody>
+</table>
+<p><em>示例</em></p>
+<pre><code class="language-java">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(3);
+list.add(1);
+list.add(2);
+Key key = new Key(&quot;ns1&quot;, &quot;test&quot;, &quot;listTest&quot;);
+Bin bin = new Bin(&quot;DATA&quot;,list);
+Record operate = client.operate(null, key, Operation.put(bin), Operation.get());
+System.out.println(operate.toString());
+//(gen:1),(exp:367153095),(bins:(DATA:[3, 1, 2]))
+ 
+//在倒数第一个位置前插入值5，并且获取list的size
+Record operate1 = client.operate(null, key, ListOperation.insert(&quot;DATA&quot;, -1, Value.get(5)), ListOperation.size(&quot;DATA&quot;));
+System.out.println(operate1.toString());
+//(gen:2),(exp:367153095),(bins:(DATA:[4, 4]))
+System.out.println(client.get(null,key).toString());
+//(gen:2),(exp:367153095),(bins:(DATA:[3, 1, 5, 2]))
+ 
+//获取排序后的list并返回对应的值
+System.out.println(client.operate(null, key, ListOperation.getByRankRange(&quot;DATA&quot;, 0, ListReturnType.VALUE)).toString());
+//(gen:2),(exp:367153095),(bins:(DATA:[5, 3, 2, 1]))
+  
+System.out.println(client.get(null, key).toString());
+//(gen:2),(exp:367153095),(bins:(DATA:[3, 1, 5, 2]))
+//最后一位自增1
+client.operate(null,key,ListOperation.increment(&quot;DATA&quot;,-1));
+System.out.println(client.get(null, key).toString());
+//(gen:3),(exp:367153719),(bins:(DATA:[3, 1, 5, 3]))
+//排序并去除重复值
+System.out.println(client.operate(null, key, ListOperation.sort(&quot;DATA&quot;, ListSortFlags.DROP_DUPLICATES)).toString());
+//(gen:4),(exp:367153719),(bins:null)
+System.out.println(client.get(null, key).toString());
+//(gen:4),(exp:367153719),(bins:(DATA:[1, 3, 5]))
+</code></pre>
+<h3 id="mapoperation操作">MapOperation操作</h3>
+<h4 id="mapreturntype">MapReturnType</h4>
+<p>部分方法需要传入返回类型。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Tools]]></title>
         <id>https://konui.github.io/post/tools/</id>
