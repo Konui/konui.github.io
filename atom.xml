@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://konui.github.io</id>
     <title>Gridea</title>
-    <updated>2022-01-20T07:02:12.171Z</updated>
+    <updated>2022-01-25T06:01:57.693Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://konui.github.io"/>
     <link rel="self" href="https://konui.github.io/atom.xml"/>
@@ -668,20 +668,1231 @@ System.out.println(client.get(null, key).toString());
 <h3 id="mapoperation操作">MapOperation操作</h3>
 <h4 id="mapreturntype">MapReturnType</h4>
 <p>部分方法需要传入返回类型。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Tools]]></title>
-        <id>https://konui.github.io/post/tools/</id>
-        <link href="https://konui.github.io/post/tools/">
-        </link>
-        <updated>2022-01-16T13:39:41.000Z</updated>
-        <summary type="html"><![CDATA[<p>收集一些常用工具。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>收集一些常用工具。</p>
-<!-- more -->
-<h2 id="正则表达式相关-regex">正则表达式相关 (Regex)</h2>
-<p><strong>正则表达式测试:</strong> <a href="https://regex101.com/">https://regex101.com/</a></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapReturnType.NONE</td>
+<td>不返回任何结果</td>
+</tr>
+<tr>
+<td>MapReturnType.INDEX</td>
+<td>按key的顺序返回</td>
+</tr>
+<tr>
+<td>MapReturnType.REVERSE_INDEX</td>
+<td>按key的反序返回</td>
+</tr>
+<tr>
+<td>MapReturnType.RANK</td>
+<td>按value的顺序返回</td>
+</tr>
+<tr>
+<td>MapReturnType.REVERSE_RANK</td>
+<td>按value的反序返回</td>
+</tr>
+<tr>
+<td>MapReturnType.COUNT</td>
+<td>返回所选的数量</td>
+</tr>
+<tr>
+<td>MapReturnType.KEY</td>
+<td>只返回key</td>
+</tr>
+<tr>
+<td>MapReturnType.VALUE</td>
+<td>只返回value</td>
+</tr>
+<tr>
+<td>MapReturnType.KEY_VALUE</td>
+<td>返回key和value</td>
+</tr>
+<tr>
+<td>MapReturnType.INVERTED</td>
+<td>反选范围，与其他返回类型或连接</td>
+</tr>
+</tbody>
+</table>
+<h4 id="查询相关方法-2">查询相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapOperation.size(String binName)</td>
+<td>返回map的大小</td>
+</tr>
+<tr>
+<td>MapOperation.getByKey(String binName,Value key,int returnType)</td>
+<td>根据key返回元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByKeyRange(String binName,Value keyBegin,Value keyEnd,int returnType)</td>
+<td>根据key范围(含头不含尾)获取元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByKeyList(String binName,List<Value> keys,int returnType)</td>
+<td>批量获取对应key元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByKeyRelativeIndexRange(String binName,Value key,int index, int returnType)</td>
+<td>先根据key排序然后选取从距离指定key最近的元素后index元素开始直至末尾，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByKeyRelativeIndexRange(String binName,Value key,int index,int count,int returnType)</td>
+<td>先根据key排序然后选取从距离指定key最近的元素后index元素开始count个元素，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByValue(String binName,Value value,int returnType)</td>
+<td>根据value返回元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByValueRange(String binName,Value valueBegin,Value valueEnd,int returnType)</td>
+<td>根据value范围(含头不含尾)获取元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByValueList(String binName,List<Value> values,int returnType)</td>
+<td>批量获取对应value元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByValueRelativeRankRange(String binName,Value value,int rank,int returnType)</td>
+<td>先根据value排序然后选取从距离指定value最近的元素后index元素开始直至末尾，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByValueRelativeRankRange(String binName,Value value,int rank,int count,int returnType)</td>
+<td>先根据value排序然后选取从距离指定value最近的元素后index元素开始count个元素，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByIndex(String binName,int index,int returnType)</td>
+<td>根据索引位置返回对应元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByIndexRange(String binName,int index,int returnType)</td>
+<td>返回指定索引直至末尾元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByIndexRange(String binName,int index,int count,int returnType)</td>
+<td>返回从指定索引开始，后count个元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByRank(String binName,int rank,int returnType)</td>
+<td>返回排序后第rank位置元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByRankRange(String binName,int rank,int returnType)</td>
+<td>返回排序后第rank位置元素开始直至末尾元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.getByRankRange(String binName,int rank,int count,int returnType)</td>
+<td>返回排序后第rank位置元素开始，后count个元素的returnType数据</td>
+</tr>
+</tbody>
+</table>
+<h4 id="更新相关方法-2">更新相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapOperation.put(MapPolicy policy,String binName,Value key,Value value)</td>
+<td>在map中放入新键值对，并且返回map的大小，policy不可为null</td>
+</tr>
+<tr>
+<td>MapOperation.putItems(MapPolicy policy,String binName,Map&lt;Value,Value&gt; map)</td>
+<td>批量放入键值对，并且返回map的大小，policy不可为null</td>
+</tr>
+<tr>
+<td>MapOperation.increment(MapPolicy policy,String binName,Value key,Value incr)</td>
+<td>对指定key增加值incr，incr和被增加的value类型必须为数字，并且返回map的大小，policy不可为null</td>
+</tr>
+<tr>
+<td>MapOperation.decrement(MapPolicy policy,String binName,Value key,Value decr)</td>
+<td>对指定key减去值decr，decr和被增加的value类型必须为数字，并且返回map的大小，policy不可为null</td>
+</tr>
+</tbody>
+</table>
+<h4 id="删除相关方法-2">删除相关方法</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapOperation.clear(String binName)</td>
+<td>清空map</td>
+</tr>
+<tr>
+<td>MapOperation.removeByKey(String binName,Value key,int returnType)</td>
+<td>删除指定key的元素，并根据returnType返回被删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByKeyList(String binName,List<Value> keys,int returnType)</td>
+<td>批量删除指定key的元素，并根据returnType返回被删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByKeyRange(String binName,Value keyBegin,Value keyEnd,int returnType)</td>
+<td>删除指定key范围(含头不含尾)内的元素，并根据returnType返回被删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByKeyRelativeIndexRange(String binName,Value key,int index,int returnType)</td>
+<td>先根据key排序然后删除从距离指定key最近的元素后index元素开始直至末尾，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.removeByKeyRelativeIndexRange(String binName,Value key,int index,int count,int returnType)</td>
+<td>先根据key排序然后删除从距离指定key最近的元素后index元素开始count个元素，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.removeByValue(String binName,Value value,int returnType)</td>
+<td>删除指定值的元素，并根据returnType返回被删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByValueList(String binName,List<Value> values int returnType)</td>
+<td>批量删除指定值的元素，并根据returnType返回被删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByValueRange(String binName,Value valueBegin,Value valueEnd,int returnType)</td>
+<td>删除指定value范围(含头不含尾)内的元素，并根据returnType返回被删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByValueRelativeRankRange(String binName,Value value,int rank,int returnType)</td>
+<td>先根据value排序然后删除从距离指定value最近的元素后index元素开始直至末尾，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.removeByValueRelativeRankRange(String binName,Value value,int rank,int count,int returnType)</td>
+<td>先根据value排序然后删除从距离指定value最近的元素后index元素开始count个元素，返回这些元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.removeByIndex(String binName,int index,int returnType)</td>
+<td>删除指定索引位置的元素，并根据returnType返回删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByIndexRange(String binName,int index,int returnType)</td>
+<td>删除指定索引位置至末尾的元素，并根据returnType返回删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByIndexRange(String binName,int index,int count,int returnType)</td>
+<td>删除指定索引位置开始，后count个元素，并根据returnType返回删除元素</td>
+</tr>
+<tr>
+<td>MapOperation.removeByRank(String binName,int rank,int returnType)</td>
+<td>删除排序后第rank位置元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.removeByRankRange(String binName,int rank,int returnType)</td>
+<td>删除排序后第rank位置元素开始直至末尾元素的returnType数据</td>
+</tr>
+<tr>
+<td>MapOperation.removeByRankRange(String binName,int rank,int count,int returnType)</td>
+<td>删除排序后第rank位置元素开始，后count个元素的returnType数据</td>
+</tr>
+</tbody>
+</table>
+<h3 id="删除">删除</h3>
+<p><strong>删除操作中，client.delete()与client.truncate()方法并没有真正删除硬盘中的数据，所以重启后会导致这些记录重新被加载。具体见(as社区中的文档)[https://discuss.aerospike.com/t/issues-with-cold-start-resurrecting-deleted-records/3930]。</strong><br>
+但因过期时间而被驱逐的记录不会出现此现象。<br>
+所以，单条记录删除可以将其过期时间设置为1；多记录删除应该使用lua脚本批量设置过期时间为1（直接用java端扫描再设置过期时间效率较低）。</p>
+<h4 id="删除bin">删除bin</h4>
+<p>用Value.getAsNull()的值去覆盖要写入的bin，即可删除bin。要操作的记录不存在会抛出异常。<br>
+当该记录所有bin都被删除后，该记录也会被删除。但和delete与truncate一样，重启后会出现已经被删除的记录，出现的记录为删除操作前的状态。</p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;123&quot;);
+ 
+Bin bin1 = new Bin(&quot;DATA1&quot;,&quot;123&quot;);
+Bin bin2 = new Bin(&quot;DATA2&quot;,&quot;321&quot;);
+ 
+client.put(null,key,bin1,bin2);
+ 
+Record record1 = client.get(null,key);
+System.out.println(record1.toString());
+//(gen:1),(exp:355634387),(bins:(DATA2:321),(DATA1:123))
+ 
+//删除名为&quot;DATA2&quot;的bin
+Bin bin3 = new Bin(&quot;DATA2&quot;, Value.getAsNull());
+client.put(null,key,bin3);
+ 
+Record record2 = client.get(null,key);
+System.out.println(record2.toString());
+//(gen:2),(exp:355634387),(bins:(DATA1:123))
+</code></pre>
+<h4 id="删除key">删除key</h4>
+<p><em>直接删除</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;123&quot;);
+//该方法删除的记录可能会在重启后出现
+client.delete(null,key);
+</code></pre>
+<p><em>用过期时间驱逐key</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;123&quot;);
+WritePolicy policy = new WritePolicy();
+policy.expiration=1;
+client.touch(policy,key);
+</code></pre>
+<h2 id="查询">查询</h2>
+<h3 id="根据key查询">根据key查询</h3>
+<h4 id="get">get</h4>
+<p>查询记录<br>
+批量查询时可以用Key[]数组或者传入BatchRead的list集合。<br>
+<em>get-单记录</em></p>
+<pre><code class="language-java">Key key = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;ky1&quot;);
+Bin bin1 = new Bin(&quot;b1&quot;,&quot;abc&quot;);
+Bin bin2 = new Bin(&quot;b2&quot;,&quot;def&quot;);
+Bin bin3 = new Bin(&quot;b3&quot;,123);
+client.put(null,key,bin1,bin2,bin3);
+ 
+//获取所有bin
+Record record = client.get(null, key);
+System.out.println(record.toString());
+//(gen:1),(exp:367149831),(bins:(b2:def),(b3:123),(b1:abc))
+ 
+//获取指定bin
+Record record1 = client.get(null, key, &quot;b1&quot;, &quot;b2&quot;);
+System.out.println(record1.toString());
+//(gen:1),(exp:367149831),(bins:(b2:def),(b1:abc))
+</code></pre>
+<p><em>get-多记录</em></p>
+<pre><code class="language-java">Key key1 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt1&quot;);
+Bin bin1 = new Bin(&quot;DATA&quot;,1);
+Bin b1 = new Bin(&quot;z&quot;,1);
+client.put(null,key1,bin1,b1);
+ 
+Key key2 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt2&quot;);
+Bin bin2 = new Bin(&quot;DATA&quot;,2);
+client.put(null,key2,bin2);
+ 
+Key key3 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt3&quot;);
+Bin bin3 = new Bin(&quot;DATA&quot;,3);
+client.put(null,key3,bin3);
+ 
+//获取所有bin
+Key[] keys = new Key[]{key1,key2,key3};
+Record[] records = client.get(null, keys);
+for (int i = 0; i &lt; records.length; i++) {
+    System.out.print(records[i].toString()+&quot;\t&quot;);
+}
+System.out.println();
+//(gen:3),(exp:367150918),(bins:(DATA:1),(z:1)) (gen:3),(exp:367150918),(bins:(DATA:2)) (gen:3),(exp:367150918),(bins:(DATA:3))
+ 
+//获取指定bin
+Record[] records1 = client.get(null, keys, &quot;z&quot;);
+for (int i = 0; i &lt; records1.length; i++) {
+    System.out.print(records1[i].toString()+&quot;\t&quot;);
+}
+System.out.println();
+//(gen:3),(exp:367150918),(bins:(z:1))  (gen:3),(exp:367150918),(bins:null) (gen:3),(exp:367150918),(bins:null)
+  
+//根据key指定不同的bin
+List&lt;BatchRead&gt; list = new ArrayList&lt;&gt;();
+BatchRead batchRead1 = new BatchRead(key1, true);
+list.add(batchRead1);
+list.add(new BatchRead(key2,new String[]{&quot;DATA&quot;,&quot;z&quot;}));
+list.add(new BatchRead(key3,new String[]{&quot;z&quot;}));
+client.get(null,list);
+ 
+list.forEach(batchRead -&gt;{
+    System.out.println(batchRead.record.toString());
+});
+//(gen:3),(exp:367150918),(bins:(DATA:1),(z:1))
+//(gen:3),(exp:367150918),(bins:(DATA:2))
+//(gen:3),(exp:367150918),(bins:null)
+</code></pre>
+<h4 id="getheader">getHeader</h4>
+<p>获取记录头信息，不返回bin</p>
+<pre><code class="language-java">Key key1 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt1&quot;);
+Bin bin1 = new Bin(&quot;DATA&quot;,1);
+Bin b1 = new Bin(&quot;z&quot;,1);
+client.put(null,key1,bin1,b1);
+ 
+Key key2 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt2&quot;);
+Bin bin2 = new Bin(&quot;DATA&quot;,2);
+client.put(null,key2,bin2);
+ 
+//单个获取
+Record header = client.getHeader(null, key1);
+System.out.println(header.toString());
+//(gen:6),(exp:367151278),(bins:null)
+  
+//批量获取
+Record[] header1 = client.getHeader(null, new Key[]{key1, key2});
+for (int i = 0; i &lt; header1.length; i++) {
+    System.out.println(header1[i].toString());
+}
+//(gen:6),(exp:367151278),(bins:null)
+//(gen:5),(exp:367151278),(bins:null)
+</code></pre>
+<h3 id="记录查询-扫描">记录查询、扫描</h3>
+<p><strong>query和scan的方法只会处理client初始化时连接的节点上所管的主分区记录，不会处理副本分区记录，如果client没有连接全部的as集群节点会出现记录数少于实际记录数情况，具体见常见问题1。</strong><br>
+<strong>例如有三台as集群其中一个set中100条记录，as client初始化时只连接其中两台，调用该方法扫描该set可能只会返回70，而不是100。</strong></p>
+<h4 id="query">query</h4>
+<p>query查询可以根据条件对set进行查询。<br>
+条件的拼接需要用后缀表达式的形式。PredExp用法见下文</p>
+<pre><code class="language-java">Statement statement = new Statement();
+statement.setNamespace(&quot;ns1&quot;);
+statement.setSetName(&quot;test&quot;);
+//结果只返回bin1，bin2，如果不设置则全部返回
+statement.setBinNames(&quot;bin1&quot;,&quot;bin2&quot;);
+statement.setPredExp(
+        //bin1的int值小于8
+        PredExp.integerBin(&quot;bin1&quot;),
+        PredExp.integerValue(8),
+        PredExp.integerLess(),
+ 
+        //bin2符合正则表达式&quot;a:&quot;
+        PredExp.stringBin(&quot;bin2&quot;),
+        PredExp.stringValue(&quot;a:&quot;),
+        PredExp.stringRegex(0),
+ 
+        //bin2符合正则表达式&quot;s$&quot;
+        PredExp.stringBin(&quot;bin2&quot;),
+        PredExp.stringValue(&quot;s$&quot;),
+        PredExp.stringRegex(0),
+  
+        //三个条件用and连接
+        PredExp.and(3));
+ 
+RecordSet records = client.query(null,statement);
+ 
+ 
+while(records.next()){
+    Key key = records.getKey();
+    Record record = records.getRecord();
+    System.out.println(&quot;key : &quot;+key.toString()+&quot;, record : &quot; + record.toString());
+}
+//key : ns1:test:null:b4d4568f2c8fe525eadad9b485f53476bb0652bf, record : (gen:1),(exp:361883268),(bins:(bin1:0),(bin2:a:cxovihis))
+//key : ns1:test:null:416079a7a6741bcf1df50b980584a3ae5050323d, record : (gen:1),(exp:360929020),(bins:(bin1:4),(bin2:a:afds))
+</code></pre>
+<h4 id="scanall">scanAll</h4>
+<p>扫描set中的所有记录，可以指定要扫描的bin。</p>
+<pre><code class="language-java">Key key1 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt1&quot;);
+Bin bin1 = new Bin(&quot;DATA&quot;,1);
+Bin b1 = new Bin(&quot;z&quot;,1);
+client.put(null,key1,bin1,b1);
+ 
+Key key2 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt2&quot;);
+Bin bin2 = new Bin(&quot;DATA&quot;,2);
+client.put(null,key2,bin2);
+ 
+Key key3 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;bt3&quot;);
+Bin bin3 = new Bin(&quot;z&quot;,3);
+client.put(null,key3,bin3);
+ 
+ScanCallback callback = new ScanCallback() {
+    @Override
+    public void scanCallback(Key key, Record record) throws AerospikeException {
+        System.out.println(key.toString()+&quot; -&gt; &quot;+record.toString());
+    }
+};
+client.scanAll(null,&quot;ns1&quot;,&quot;test&quot;,callback,&quot;z&quot;);
+  
+//ns1:test:null:3c84fce89d2b75697840501526c321287bc51233 -&gt; (gen:1),(exp:367151585),(bins:(z:3))
+//ns1:test:null:eaa95612885b3a31fbf7c83684261fdc6f0f0c51 -&gt; (gen:1),(exp:367151585),(bins:(z:1))
+</code></pre>
+<h3 id="其他">其他</h3>
+<h4 id="exists">exists</h4>
+<p>判断记录是否存在</p>
+<pre><code class="language-java">Key key1 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;123&quot;);
+ 
+Bin bin = new Bin(&quot;DATA&quot;, &quot;1&quot;);
+client.put(null,key1,bin);
+ 
+boolean isExists1 = client.exists(null,key1);
+//不存在的key
+Key key2 = new Key(&quot;ns1&quot;,&quot;test&quot;,&quot;321&quot;);
+boolean isExists2 = client.exists(null,key2);
+ 
+System.out.println(&quot;key1:&quot;+isExists1+&quot;,key2:&quot;+isExists2);
+//key1:true,key2:false
+ 
+//批量查询
+boolean[] result = client.exists(null,new Key[]{key1,key2});
+System.out.println(&quot;key1:&quot;+result[0]+&quot;,key2:&quot;+result[1]);
+//key1:true,key2:false
+</code></pre>
+<h2 id="客户端lua相关">客户端Lua相关</h2>
+<p>as的lua udf调用分为两种类型：</p>
+<ul>
+<li>record udf，对记录进行更新等相关操作</li>
+<li>stream udf，只能对记录执行只读操作，一般用于聚合查询</li>
+</ul>
+<h3 id="注册lua">注册lua</h3>
+<p>有些udf调用必须保证客户端也有相同的脚本，所以这些udf调用尽量在客户端进行注册<br>
+例如，stream udf中的reduce操作，是在客户端完成的，服务端只负责将reduce之前的聚合结果返回给客户端，客户端继续执行reduce归约操作。<br>
+<em>注册lua</em></p>
+<pre><code class="language-java">//第一种：使用file文件加载
+//加载位于resource目录下的test.lua
+File file = new File(&quot;src/main/resources/test.lua&quot;);
+//该register方法参数含义，从左至右依次为：策略，本地lua文件路径，注册到的服务端lua路径，脚本语言类型
+RegisterTask register = client.register(null, file.getPath(), file.getName(), Language.LUA);
+ 
+//第二种：使用类加载器进行加载
+//加载位于resource目录下的test.lua
+//推荐通过class获取对应的类加载器，如：Example.class.getClassLoader()
+//此处通过当前线程获取类加载器
+//该register方法参数含义，从左至右依次为：策略，类加载器，本地lua路径，注册到的服务端lua路径，脚本语言类型
+RegisterTask register = client.register(null,Thread.currentThread().getContextClassLoader(),&quot;test.lua&quot;,&quot;test.lua&quot;, Language.LUA);
+ 
+//第三种：直接加载lua代码
+//此处使用jdk14的代码块，方便展示
+String code = &quot;&quot;&quot;
+ 
+            function abc(rec,str)
+                -- 如果bin(DATA)不为空，则重复拼接一次自身
+                if (rec['DATA'] ~= nil) then
+                    rec['DATA'] = rec['DATA']..rec['DATA'];
+                    aerospike:update(rec);
+                end
+                return rec;
+            end
+ 
+            &quot;&quot;&quot;;
+//该register方法参数含义，从左至右依次为：策略，lua源码，注册到的服务端lua路径，脚本语言
+RegisterTask register = client.registerUdfString(null, code, &quot;test.lua&quot;, Language.LUA);
+  
+ 
+//等待注册完成
+register.waitTillComplete();
+</code></pre>
+<h3 id="record-udf-调用">record udf 调用</h3>
+<p><em>单记录操作</em></p>
+<pre><code class="language-java">String code = &quot;&quot;&quot;
+ 
+        function abc(rec,str)
+            -- 如果bin(DATA)不为空，则重复拼接一次自身
+            if (rec['DATA'] ~= nil) then
+                rec['DATA'] = rec['DATA']..rec['DATA'];
+                aerospike:update(rec);
+            end
+            return 1;
+        end
+ 
+        &quot;&quot;&quot;;
+ 
+RegisterTask register = client.registerUdfString(null, code, &quot;test.lua&quot;, Language.LUA);
+//等待注册完成
+register.waitTillComplete();
+ 
+Key key = new Key(&quot;ns1&quot;, &quot;test&quot;, &quot;luaTest123&quot;);
+Bin bin = new Bin(&quot;DATA&quot;, &quot;123456&quot;);
+client.put(null, key, bin);
+ 
+//上文注册到服务器中的lua为test.lua，所以此处execute第三个参数需要填test；需要执行的方法为abc，所以第四个参数为abc
+Object execute = client.execute(null, key, &quot;test&quot;, &quot;abc&quot;);
+System.out.println(execute.toString());
+//1
+System.out.println(client.get(null, key).toString());
+//(gen:16),(exp:367399795),(bins:(DATA:123456123456))
+</code></pre>
+<p><em>多记录操作</em></p>
+<pre><code class="language-java">//该例子将DATA的bin记录重复一次
+String code = &quot;&quot;&quot;
+ 
+        function abc(rec,str)
+            -- 如果bin(DATA)不为空，则重复拼接一次自身
+            if (rec['DATA'] ~= nil) then
+                rec['DATA'] = rec['DATA']..rec['DATA'];
+                aerospike:update(rec);
+            end
+            return 1;
+        end
+ 
+        &quot;&quot;&quot;;
+RegisterTask register = client.registerUdfString(null, code, &quot;test.lua&quot;, Language.LUA);
+//等待注册完成
+register.waitTillComplete();
+ 
+Key key = new Key(&quot;ns1&quot;, &quot;luaTest&quot;, &quot;luaTest123&quot;);
+Bin bin = new Bin(&quot;DATA&quot;, &quot;123456&quot;);
+client.put(null, key, bin);
+client.put(null,new Key(&quot;ns1&quot;,&quot;luaTest&quot;,1),bin);
+client.put(null,new Key(&quot;ns1&quot;,&quot;luaTest&quot;,2),bin);
+client.put(null,new Key(&quot;ns1&quot;,&quot;luaTest&quot;,3),bin);
+ 
+Statement statement = new Statement();
+statement.setNamespace(&quot;ns1&quot;);
+statement.setSetName(&quot;luaTest&quot;);
+ 
+Object execute = client.execute(null,statement , &quot;test&quot;, &quot;abc&quot;);
+System.out.println(execute.toString());
+//是用statement调用udf，不会有返回值，且异步调用
+//这里睡眠3秒，等待udf执行完毕
+TimeUnit.SECONDS.sleep(3);
+client.scanAll(null,&quot;ns1&quot;,&quot;luaTest&quot;,(k,v)-&gt; System.out.println(v.toString()));
+//(gen:2),(exp:367400545),(bins:(DATA:123456123456))
+//(gen:2),(exp:367400545),(bins:(DATA:123456123456))
+//(gen:2),(exp:367400545),(bins:(DATA:123456123456))
+//(gen:2),(exp:367400545),(bins:(DATA:123456123456))
+</code></pre>
+<h3 id="stream-udf-调用">stream udf 调用</h3>
+<p><em>java</em></p>
+<pre><code class="language-java">private static final Random random = new Random();
+private static final String[] BINS = new String[]{&quot;DATA&quot;, &quot;price&quot;};
+private static void writeRecords(int keyIndex, Bin bin) {
+    Key key = new Key(&quot;ns1&quot;, &quot;luaTest&quot;, keyIndex);
+    WritePolicy policy  = new WritePolicy();
+    policy.sendKey=true;
+    client.put(policy, key, bin);
+}
+//随机生成只还有DATA或者price bin的记录，并打印生成的price记录数及其值的总和
+private static void writeRandomRecords() {
+    int count = 0;
+    int sum = 0;
+    for (int i = 0; i &lt; 100; i++) {
+        int binNameIndex = random.nextInt(2);
+        int value = random.nextInt(1000);
+        String binName = BINS[binNameIndex];
+        Bin bin = new Bin(binName, value);
+        writeRecords(i, bin);
+        if (binNameIndex == 1) {
+            count++;
+            sum += value;
+        }
+    }
+    System.out.println(String.format(&quot;count : %d , sum : %d&quot;, count, sum));
+    //count : 49 , sum : 25717
+}
+public static void main(String[] args) throws InterruptedException {
+    //生成数据
+    writeRandomRecords();
+    //向服务器注册脚本
+    client.register(null, StatisticsLua.class.getClassLoader(), &quot;statistics.lua&quot;, &quot;statistics.lua&quot;, Language.LUA).waitTillComplete();
+    Statement statement = new Statement();
+    //设置本次聚合操作本地和服务器需要执行的lua脚本
+    statement.setAggregateFunction(StatisticsLua.class.getClassLoader(), &quot;statistics.lua&quot;, &quot;statistics&quot;, &quot;add_stat_ops&quot;);
+    statement.setNamespace(&quot;ns1&quot;);
+    statement.setSetName(&quot;luaTest&quot;);
+    ResultSet objects = client.queryAggregate(null, statement);
+     
+    //打印聚合结果
+    while (objects.next()) {
+        Map&lt;Object, Object&gt; map = (Map&lt;Object, Object&gt;) objects.getObject();
+        map.forEach((k,v)-&gt;{
+            System.out.print(String.format(&quot;%s : %s ,&quot;,k,v));
+        });
+        System.out.println();
+        //count : 49 ,sum : 25717 ,
+    }
+    objects.close();
+}
+</code></pre>
+<p><em>lua脚本</em></p>
+<pre><code class="language-lua">-- 过滤操作 过滤掉没有price bin的记录
+local function filterPrice(rec)
+    return not (rec['price'] == nil)
+end
+ 
+-- 聚合操作 将当前记录的值放到聚合对象中
+local function agggregater_stats(map, val)
+    map['count'] = map['count'] + 1
+    map['sum'] = map['sum'] + val['price']
+    return map
+end
+ 
+-- 归约操作 将聚合对象归约
+local function reduce_stats(a, b)
+    a['count'] = a['count'] + b['count']
+    a['sum'] = a['sum'] + b['sum']
+    return a
+end
+ 
+-- 执行流操作
+function add_stat_ops(stream)
+    return stream : filter(filterPrice)
+                    : aggregate( map { count=0,sum=0} , agggregater_stats)
+                    : reduce(reduce_stats)
+end
+</code></pre>
+<h2 id="查询常用对象">查询常用对象</h2>
+<h3 id="record对象">Record对象</h3>
+<p>record的方法中getTimeToLive()是获取该记录的ttl，其他get方法为获取对应bin的相应类型值不再赘述</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>属性类型</th>
+<th>属性含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bins</td>
+<td>Map&lt;String,Object&gt;</td>
+<td>此次查询的所有bin，map的key为bin名，value为bin值</td>
+</tr>
+<tr>
+<td>generation</td>
+<td>Int</td>
+<td>更新次数，一般与写入策略同时使用，每次更新操作都会加1</td>
+</tr>
+<tr>
+<td>expiration</td>
+<td>Int</td>
+<td>过期时间，从2010.01.01 00:00:00开始计算</td>
+</tr>
+</tbody>
+</table>
+<h3 id="batchread对象">BatchRead对象</h3>
+<p>批量读取时使用的对象</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>属性类型</th>
+<th>属性含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key</td>
+<td>Key</td>
+<td>需要读取记录的Key对象</td>
+</tr>
+<tr>
+<td>binNames</td>
+<td>String[]</td>
+<td>需要获取的bin名数组</td>
+</tr>
+<tr>
+<td>readAllBins</td>
+<td>boolean</td>
+<td>是否读全部的bin，如果为true忽略配置的binNames，如果为false且未配置binNames则只返回记录头，否则按照配置的binNames返回对应的bin</td>
+</tr>
+<tr>
+<td>record</td>
+<td>Record</td>
+<td>查询后记录放到此属性中，如果没有查到则为null</td>
+</tr>
+</tbody>
+</table>
+<h3 id="predexp类">PredExp类</h3>
+<p>用于Statement中的查询条件，用后缀表达式的方式去拼接。</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PredExp.and(int nexp)</td>
+<td>and连接，nexp用于指定拼接表达式的个数，一般为2</td>
+</tr>
+<tr>
+<td>PredExp.or(int nexp)</td>
+<td>or连接，nexp用于指定拼接表达式的个数，一般为2</td>
+</tr>
+<tr>
+<td>PredExp.integerValue(Calendar val)</td>
+<td>时间，存储的为自1970至今的纳秒数</td>
+</tr>
+<tr>
+<td>PredExp.integerValue(long val)</td>
+<td>整数值</td>
+</tr>
+<tr>
+<td>PredExp.stringValue(String val)</td>
+<td>字符串</td>
+</tr>
+<tr>
+<td>PredExp.integerBin(String name)</td>
+<td>指定整数bin</td>
+</tr>
+<tr>
+<td>PredExp.stringBin(String name)</td>
+<td>指定字符串bin</td>
+</tr>
+<tr>
+<td>PredExp.listBin(String name)</td>
+<td>指定list类型bin</td>
+</tr>
+<tr>
+<td>PredExp.mapBin(String name)</td>
+<td>指定map类型bin</td>
+</tr>
+<tr>
+<td>PredExp.integerVar(String name)</td>
+<td>创建用于list/map类型迭代的整数变量</td>
+</tr>
+<tr>
+<td>PredExp.stringVar(String name)</td>
+<td>创建用于list/map类型迭代的字符串变量</td>
+</tr>
+<tr>
+<td>PredExp.recDeviceSize()</td>
+<td>记录在磁盘上的大小</td>
+</tr>
+<tr>
+<td>PredExp.recLastUpdate()</td>
+<td>记录的上次更新时间，存储的为自1970开始至今纳秒数</td>
+</tr>
+<tr>
+<td>PredExp.recVoidTime()</td>
+<td>记录的过期时间，存储的为自1970开始至今纳秒数</td>
+</tr>
+<tr>
+<td>PredExp.recDigestModulo(int mod)</td>
+<td>记录的key对mod的余数</td>
+</tr>
+<tr>
+<td>PredExp.integerEqual()</td>
+<td>整数相等</td>
+</tr>
+<tr>
+<td>PredExp.integerUnequal()</td>
+<td>整数不相等</td>
+</tr>
+<tr>
+<td>PredExp.integerGreater()</td>
+<td>整数大于</td>
+</tr>
+<tr>
+<td>PredExp.integerGreaterEq()</td>
+<td>整数大于等于</td>
+</tr>
+<tr>
+<td>PredExp.integerLess()</td>
+<td>整数小于</td>
+</tr>
+<tr>
+<td>PredExp.integerLessEq()</td>
+<td>整数小于等于</td>
+</tr>
+<tr>
+<td>PredExp.stringEqual()</td>
+<td>字符串等于</td>
+</tr>
+<tr>
+<td>PredExp.stringUnequal()</td>
+<td>字符串不等于</td>
+</tr>
+<tr>
+<td>PredExp.stringRegex(int flags)</td>
+<td>创建正则表达式，flags参数含义见下文</td>
+</tr>
+<tr>
+<td>PredExp.listIterateOr(String varName)</td>
+<td>匹配list中的任意项</td>
+</tr>
+<tr>
+<td>PredExp.listIterateAnd(String varName)</td>
+<td>匹配list中的所有项</td>
+</tr>
+<tr>
+<td>PredExp.mapKeyIterateOr(String varName)</td>
+<td>匹配map中key的任意项</td>
+</tr>
+<tr>
+<td>PredExp.mapKeyIterateAnd(String varName)</td>
+<td>匹配map中key的所有项</td>
+</tr>
+<tr>
+<td>PredExp.mapValIterateOr(String varName)</td>
+<td>匹配map中value的任意项</td>
+</tr>
+<tr>
+<td>PredExp.mapValIterateAnd(String varName)</td>
+<td>匹配map中value的所有项</td>
+</tr>
+</tbody>
+</table>
+<p><em>PredExp示例</em></p>
+<pre><code class="language-java">//bin DATA的值等于&quot;test&quot;
+PredExp.stringValue(&quot;test&quot;)
+PredExp.stringBin(&quot;DATA&quot;)
+PredExp.stringstringEqual()
+  
+//bin2的值 以s结尾
+PredExp.stringBin(&quot;bin2&quot;),
+PredExp.stringValue(&quot;s$&quot;),
+PredExp.stringRegex(0),
+  
+//bin x中，任意一项迭代变量v等于&quot;hello&quot;
+PredExp.stringVar(&quot;v&quot;)
+PredExp.stringValue(&quot;hello&quot;)
+PredExp.stringEqual()
+PredExp.listBin(&quot;x&quot;)
+PredExp.listIterateOr(&quot;v&quot;)
+</code></pre>
+<h4 id="正则参数说明">正则参数说明</h4>
+<table>
+<thead>
+<tr>
+<th>标志位</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RegexFlag.NONE</td>
+<td>默认</td>
+</tr>
+<tr>
+<td>RegexFlag.EXTENDED</td>
+<td>使用POSIX扩展正则表达式语法</td>
+</tr>
+<tr>
+<td>RegexFlag.ICASE</td>
+<td>忽略大小写</td>
+</tr>
+<tr>
+<td>RegexFlag.NOSUB</td>
+<td>不返回匹配位置</td>
+</tr>
+<tr>
+<td>RegexFlag.NEWLINE</td>
+<td>任意字符（*）不匹配换行符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常用policy及其配置">常用Policy及其配置</h2>
+<p>as中一般policy的属性为public且没有get/set方法，所以直接更改属性值即可。</p>
+<h3 id="policy">Policy</h3>
+<p>BatchPolicy、QueryPolicy、ScanPolicy、WritePolicy均继承自该策略。</p>
+<h4 id="priority优先级">priority（优先级）</h4>
+<p>命令的优先级，仅用于扫描策略。默认：Priority.DEFAULT</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Priority.DEFAULT</td>
+<td>服务器中配置的优先级</td>
+</tr>
+<tr>
+<td>Priority.LOW</td>
+<td>低</td>
+</tr>
+<tr>
+<td>Priority.MEDIUM</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Priority.HIGH</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sendkey">sendKey</h4>
+<p>写入的时候是否写入原生的key，默认false。<br>
+如果写入原生key，则在扫描或查询时，可以在返回的Key对象中获取到原生的key，否则只能获取到经过hash后的字符串。</p>
+<h3 id="clientpolicy">ClientPolicy</h3>
+<p>客户端初始化策略。其中设置的各种命令的默认策略是在执行该命令时，传入的策略为null时调用。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eventLoops</td>
+<td>as中异步命令所需的事件循环组</td>
+</tr>
+<tr>
+<td>readPolicyDefault</td>
+<td>默认读策略</td>
+</tr>
+<tr>
+<td>writePolicyDefault</td>
+<td>默认写策略</td>
+</tr>
+<tr>
+<td>scanPolicyDefault</td>
+<td>默认扫描策略</td>
+</tr>
+<tr>
+<td>queryPolicyDefault</td>
+<td>默认查询策略</td>
+</tr>
+<tr>
+<td>batchPolicyDefault</td>
+<td>默认批处理策略</td>
+</tr>
+</tbody>
+</table>
+<h3 id="writepolicy">WritePolicy</h3>
+<p>写入策略，一般为更新或删除记录时传入。</p>
+<h4 id="expiration过期时间">expiration（过期时间）</h4>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-2</td>
+<td>本次更新记录不会刷新过期时间</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>永不过期</td>
+</tr>
+<tr>
+<td>0</td>
+<td>使用配置文件中对应配置的过期时间</td>
+</tr>
+<tr>
+<td>大于0</td>
+<td>设置该值时间后过期，单位为秒</td>
+</tr>
+</tbody>
+</table>
+<h4 id="generation预期更新次数">generation（预期更新次数）</h4>
+<p>设置预期的更新次数，与generationPolicy一起使用。实际记录的generation每次进行更新操作都会加1，该值在读取记录时可获取到，见Record。</p>
+<h4 id="generationpolicy预期策略">generationPolicy（预期策略）</h4>
+<p>当写入策略设置的generation（即预期）与服务器当前记录的generation（即实际）不符合当前设置的预期策略时，会抛出异常。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GenerationPolicy.NONE</td>
+<td>不限制</td>
+</tr>
+<tr>
+<td>GenerationPolicy.EXPECT_GEN_GT</td>
+<td>更新/删除时，预期大于实际则成功</td>
+</tr>
+<tr>
+<td>GenerationPolicy.EXPECT_GEN_EQUAL</td>
+<td>更新/删除时，预期与实际一致则成功</td>
+</tr>
+</tbody>
+</table>
+<h4 id="recordexistsaction重复策略">recordExistsAction（重复策略）</h4>
+<p>如何处理已经存在的记录，默认为RecordExistsAction.UPDATE</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecordExistsAction.UPDATE</td>
+<td>创建或更新，没有涉及到更新的bin不会丢失</td>
+</tr>
+<tr>
+<td>RecordExistsAction.UPDATE_ONLY</td>
+<td>仅更新，不存在则失败，没有涉及到更新的bin不会丢失</td>
+</tr>
+<tr>
+<td>RecordExistsAction.REPLACE</td>
+<td>创建或者替换，没有涉及到更新的bin会丢失</td>
+</tr>
+<tr>
+<td>RecordExistsAction.REPLACE_ONLY</td>
+<td>仅替换，不存在则失败，没有涉及到更新的bin会丢失</td>
+</tr>
+<tr>
+<td>RecordExistsAction.CREATE_ONLY</td>
+<td>仅创建，存在则失败</td>
+</tr>
+</tbody>
+</table>
+<h4 id="commitlevel提交等级">commitLevel（提交等级）</h4>
+<p>默认为CommitLevel.COMMIT_ALL。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CommitLevel.COMMIT_ALL</td>
+<td>等待主服务器和副本服务器全部执行成功</td>
+</tr>
+<tr>
+<td>CommitLevel.COMMIT_MASTER</td>
+<td>只等待主服务器执行成功</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scanpolicy">ScanPolicy</h3>
+<p>扫描策略</p>
+<h4 id="scanpercent扫描百分比">scanPercent（扫描百分比）</h4>
+<p>要扫描的数据百分比，有效整数范围是1到100。默认为100。</p>
+<h4 id="concurrentnodes">concurrentNodes</h4>
+<p>并行或串行发出扫描请求。默认true</p>
+<h4 id="includebindata是否返回bin数据">includeBinData（是否返回bin数据）</h4>
+<p>false仅返回Record Header。默认true。</p>
+<h3 id="querypolicy">QueryPolicy</h3>
+<p>查询策略</p>
+<h4 id="includebindata是否返回bin数据-2">includeBinData（是否返回bin数据）</h4>
+<p>false仅返回Record Header。默认true。</p>
+<h3 id="listpolicy">ListPolicy</h3>
+<p>对list类型bin的操作策略。该策略的属性均被final修饰，所以创建该策略时需指定对应属性。</p>
+<h4 id="构造方法">构造方法</h4>
+<p>1.无参构造方法</p>
+<pre><code class="language-java">public ListPolicy() {
+   this(ListOrder.UNORDERED, ListWriteFlags.DEFAULT);
+}
+</code></pre>
+<p>2.ListOrder与ListWriteFlags</p>
+<pre><code class="language-java">public ListPolicy(ListOrder order, int flags);
+</code></pre>
+<h4 id="listorder">ListOrder</h4>
+<p>与ListOrder中枚举常量关联，只有：ListOrder.ORDERED（1，排序）、ListOrder.UNORDERED（0，未排序）两种值。</p>
+<h4 id="listwriteflags">ListWriteFlags</h4>
+<table>
+<thead>
+<tr>
+<th>常量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ListWriteFlags.DEFAULT</td>
+<td>允许重复值，以及可以在任何索引出插入。</td>
+</tr>
+<tr>
+<td>ListWriteFlags.ADD_UNIQUE</td>
+<td>只能添加唯一的值。</td>
+</tr>
+<tr>
+<td>ListWriteFlags.INSERT_BOUNDED</td>
+<td>强制约束插入边界，不允许插入当前列表边界之外的索引处。</td>
+</tr>
+<tr>
+<td>ListWriteFlags.NO_FAIL</td>
+<td>如果列表因为写标志位限制而失败，则不引发错误。</td>
+</tr>
+<tr>
+<td>ListWriteFlags.PARTIAL</td>
+<td>如果有因为写标志位限制导致写入失败，则允许提交其他有效的列表项。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mappolicy">MapPolicy</h3>
+<p>对map类型bin的操作策略。与ListPolicy相同，需要在创建policy对象时指定属性值。</p>
+<h4 id="构造方法-2">构造方法</h4>
+<p>1.无参构造方法</p>
+<pre><code class="language-java">public MapPolicy() {
+   this(MapOrder.UNORDERED, MapWriteMode.UPDATE);
+}
+</code></pre>
+<p>2.使用MapOrder与MapWriteMode</p>
+<pre><code class="language-java">public MapPolicy(MapOrder order, MapWriteMode writeMode);
+</code></pre>
+<p>3.使用MapOrder与MapWriteFlags</p>
+<pre><code class="language-java">public MapPolicy(MapOrder order, int flags);
+</code></pre>
+<h4 id="maporder">MapOrder</h4>
+<table>
+<thead>
+<tr>
+<th>枚举值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapOrder.UNORDERED</td>
+<td>不排序。默认</td>
+</tr>
+<tr>
+<td>MapOrder.KEY_ORDERED</td>
+<td>按key排序</td>
+</tr>
+<tr>
+<td>MapOrder.KEY_VALUE_ORDERED</td>
+<td>先按key排序，后按value排序</td>
+</tr>
+</tbody>
+</table>
+<h4 id="mapwritemode">MapWriteMode</h4>
+<table>
+<thead>
+<tr>
+<th>枚举值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapWriteMode.UPDATE</td>
+<td>key存在则覆盖，不存在则创建</td>
+</tr>
+<tr>
+<td>MapWriteMode.CREATE_ONLY</td>
+<td>key存在则写入失败，不存在则创建</td>
+</tr>
+<tr>
+<td>MapWriteMode.UPDATE_ONLY</td>
+<td>key存在则覆盖，不存在则写入失败</td>
+</tr>
+</tbody>
+</table>
+<h4 id="mapwriteflags">MapWriteFlags</h4>
+<table>
+<thead>
+<tr>
+<th>常量名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapWriteFlags.DEFAULT</td>
+<td>允许创建和更新。默认</td>
+</tr>
+<tr>
+<td>MapWriteFlags.CREATE_ONLY</td>
+<td>key存在则对该key的操作将被拒绝，不存在则创建</td>
+</tr>
+<tr>
+<td>MapWriteFlags.UPDATE_ONLY</td>
+<td>key存在则覆盖，不存在则对该key的操作将被拒绝</td>
+</tr>
+<tr>
+<td>MapWriteFlags.NO_FAIL</td>
+<td>如果因为写标志位约束而拒绝，则不会引发错误</td>
+</tr>
+<tr>
+<td>MapWriteFlags.PARTIAL</td>
+<td>如果因为写标志位约束而拒绝，则允许提交其他有效项</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考及常用文档">参考及常用文档</h2>
+<p><a href="https://github.com/aerospike/aerospike-client-java/tree/master/examples">Aerospike Demo</a></p>
+<p><a href="https://docs.aerospike.com/client/java/index.html">Aerospike Java client 文档</a></p>
+<p><a href="https://javadoc.io/doc/com.aerospike/aerospike-client/latest/index.html">Aerospike doc 文档</a></p>
+<p><a href="https://docs.aerospike.com/dev_reference/error_codes">Aerospike 错误码 文档</a></p>
+<p><a href="https://javadoc.io/doc/com.aerospike/aerospike-client/latest/constant-values.html">Aerospike java client 错误码文档</a></p>
+<h2 id="常见问题">常见问题</h2>
+<ol>
+<li>Java client中，批量查询及按条件查询、扫描时，如果as client初始化时没有连接全部的as集群节点，则结果记录可能会少于实际记录。<br>
+原因：在java client 4.4.0版本以下，批量查询发送命令前，只会将单条记录发送到该记录对应的主节点上【即使指定pocliy中的查询方式也只会查主节点】（as将namespace分成4096个分区，记录会根据set和key散列到这4096个分区中，集群中的节点会平分这4096个分区成为该分区的主节点）如果client没有连接这个主节点则会抛出异常。4.4.0及以上版本已经修正为按照Pocliy策略中指定的查询方式寻找节点；而按条件查询、扫描的指令发送到节点上，节点只会处理自己所管的主分区内的记录，其他的直接跳过。</li>
+</ol>
 ]]></content>
     </entry>
 </feed>
