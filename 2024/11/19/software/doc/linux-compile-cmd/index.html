@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"konui.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="记录Linux编译调试相关命令的参数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux编译调试相关命令">
+<meta property="og:url" content="http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/">
+<meta property="og:site_name" content="yb chen&#39;s blog">
+<meta property="og:description" content="记录Linux编译调试相关命令的参数">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-19T19:42:20.000Z">
+<meta property="article:modified_time" content="2025-04-23T09:05:19.980Z">
+<meta property="article:author" content="yb.chen">
+<meta property="article:tag" content="命令">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="编译">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/","path":"2024/11/19/software/doc/linux-compile-cmd/","title":"Linux编译调试相关命令"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux编译调试相关命令 | yb chen's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="yb chen's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">yb chen's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-websites"><a href="/websites/" rel="section"><i class="fa fa-link fa-fw"></i>好链收录</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-g-%E7%BC%96%E8%AF%91"><span class="nav-number">1.</span> <span class="nav-text">gcc&#x2F;g++编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">常用参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB"><span class="nav-number">2.</span> <span class="nav-text">GDB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Layout%E5%91%BD%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">Layout命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%B3%E8%BD%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">跳转命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E8%BE%93%E5%87%BA%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">调试输出命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%AD%E7%82%B9"><span class="nav-number">2.4.</span> <span class="nav-text">断点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E7%82%B9"><span class="nav-number">2.5.</span> <span class="nav-text">观察点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Display%E8%B7%9F%E8%B8%AA%E7%82%B9"><span class="nav-number">2.6.</span> <span class="nav-text">Display跟踪点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E4%BF%A1%E6%81%AF"><span class="nav-number">2.7.</span> <span class="nav-text">运行信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TUI"><span class="nav-number">2.8.</span> <span class="nav-text">TUI</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QEMU"><span class="nav-number">3.</span> <span class="nav-text">QEMU</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E9%80%80%E5%87%BAmonitor"><span class="nav-number">3.1.</span> <span class="nav-text">进入退出monitor</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="yb.chen"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">yb.chen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Konui" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Konui" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:szybchen@gmail.com" title="E-Mail → mailto:szybchen@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="yb.chen">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yb chen's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux编译调试相关命令 | yb chen's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux编译调试相关命令<a href="https://github.com/Konui/blog/tree/main/source/_posts/software/doc/linux-compile-cmd.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-20 03:42:20" itemprop="dateCreated datePublished" datetime="2024-11-20T03:42:20+08:00">2024-11-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-23 17:05:19" itemprop="dateModified" datetime="2025-04-23T17:05:19+08:00">2025-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%91%BD%E4%BB%A4/" itemprop="url" rel="index"><span itemprop="name">命令</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>978</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>记录Linux编译调试相关命令的参数</p>
+<span id="more"></span>
+
+<h2 id="gcc-g-编译"><a href="#gcc-g-编译" class="headerlink" title="gcc&#x2F;g++编译"></a>gcc&#x2F;g++编译</h2><p>gcc&#x2F;g++执行编译需要四步：</p>
+<ol>
+<li>预处理，后缀为<code>.i</code></li>
+<li>编译，后缀为<code>.s</code></li>
+<li>汇编，后缀<code>.o</code></li>
+<li>链接</li>
+</ol>
+<h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h3><ul>
+<li><code>-c</code>只执行<strong>预处理</strong>，<strong>编译</strong>和<strong>汇编</strong>，生成<code>.o</code>文件</li>
+<li><code>-C</code>在预处理时不删除注释</li>
+<li><code>-E</code>只执行预处理</li>
+<li><code>-S</code>只执行<strong>预处理</strong>和<strong>编译</strong>，生成<code>.s</code>文件</li>
+<li><code>-o</code>指定目标名称，如果缺省并执行了链接则会为<code>a.out</code></li>
+<li><code>-M</code>生成文件关联的信息，<code>-MM</code>生成的关联信息忽略<code>#include&lt;file&gt;</code>的依赖</li>
+<li><code>-O0</code>、<code>-O1</code>、<code>-O2</code>、<code>-O3</code>编译器的优化等级，<code>-O0</code>表示没有优化，<code>-O1</code>为缺省值，<code>-O3</code>优化级别最高</li>
+<li><code>-g</code> 指示编译器，在编译的时候，产生调试信息。</li>
+<li><code>-v</code>打印执行信息</li>
+<li><code>-m32</code>&#x2F;<code>-m64</code>生成32&#x2F;64位程序</li>
+<li><code>-masm=att</code>AT&amp;T格式汇编、<code>-masm=intel</code>Intel格式汇编</li>
+</ul>
+<h2 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h2><h3 id="Layout命令"><a href="#Layout命令" class="headerlink" title="Layout命令"></a>Layout命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>layout src</td>
+<td>显示源码窗口</td>
+</tr>
+<tr>
+<td>layout asm</td>
+<td>显示汇编窗口</td>
+</tr>
+<tr>
+<td>layout split</td>
+<td>显示源码 &amp; 汇编窗口</td>
+</tr>
+<tr>
+<td>layout regs</td>
+<td>显示汇编 &amp; 寄存器窗口</td>
+</tr>
+<tr>
+<td>layout next</td>
+<td>下一个layout</td>
+</tr>
+<tr>
+<td>layout prev</td>
+<td>上一个layout</td>
+</tr>
+<tr>
+<td>C-x 1</td>
+<td>单窗口模式</td>
+</tr>
+<tr>
+<td>C-x 2</td>
+<td>双窗口模式</td>
+</tr>
+<tr>
+<td>C-x a</td>
+<td>回到传统模式</td>
+</tr>
+</tbody></table>
+<h3 id="跳转命令"><a href="#跳转命令" class="headerlink" title="跳转命令"></a>跳转命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>start</td>
+<td>开始启动程序,并停在main第一句等待命令</td>
+</tr>
+<tr>
+<td>step</td>
+<td>执行下一行语句, 如语句为函数调用, 进入函数中</td>
+</tr>
+<tr>
+<td>next</td>
+<td>执行下一行语句, 如语句为函数调用, 不进入函数中</td>
+</tr>
+<tr>
+<td>finish</td>
+<td>连续运行到当前函数返回为止</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>从当前位置继续运行程序</td>
+</tr>
+<tr>
+<td>return</td>
+<td>强制令当前函数返回</td>
+</tr>
+<tr>
+<td>call func()</td>
+<td>强制调用函数, 也可以用print func()</td>
+</tr>
+<tr>
+<td>run</td>
+<td>从头开始运行程序</td>
+</tr>
+<tr>
+<td>quit</td>
+<td>退出程序</td>
+</tr>
+<tr>
+<td>until</td>
+<td>运行程序直到退出循环体; &#x2F; until+行号： 运行至某行</td>
+</tr>
+</tbody></table>
+<h3 id="调试输出命令"><a href="#调试输出命令" class="headerlink" title="调试输出命令"></a>调试输出命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>print</td>
+<td>输出变量值 &amp; 调用函数 &amp; 通过表达式改变变量值</td>
+</tr>
+<tr>
+<td>info var</td>
+<td>查看全局 &amp; 静态变量</td>
+</tr>
+<tr>
+<td>info locals</td>
+<td>查看当前函数局部变量</td>
+</tr>
+<tr>
+<td>list</td>
+<td>查看当前位置代码</td>
+</tr>
+<tr>
+<td>backtrace</td>
+<td>查看各级堆栈的函数调用及参数</td>
+</tr>
+<tr>
+<td>set var 变量&#x3D;xx</td>
+<td>将变量赋值为xx</td>
+</tr>
+</tbody></table>
+<h3 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+<th>简写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>break N_LINE</td>
+<td>在第N_LINE行上设置断点</td>
+<td>b n</td>
+</tr>
+<tr>
+<td>b func</td>
+<td>在func函数上设置端点</td>
+<td></td>
+</tr>
+<tr>
+<td>delete breakpoints</td>
+<td>删除断点</td>
+<td></td>
+</tr>
+<tr>
+<td>disable breakpoints</td>
+<td>禁用断点</td>
+<td></td>
+</tr>
+<tr>
+<td>enable 断点号</td>
+<td>启动端点</td>
+<td></td>
+</tr>
+<tr>
+<td>info breakpoints</td>
+<td>查看断点列表</td>
+<td>info b</td>
+</tr>
+<tr>
+<td>break foo if x&gt;0</td>
+<td>设置条件断点</td>
+<td></td>
+</tr>
+<tr>
+<td>clear n</td>
+<td>清除第n行的断点</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="观察点"><a href="#观察点" class="headerlink" title="观察点"></a>观察点</h3><p>当待观察点被读 或 被写时，程序停下来，并输出相关信息</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>watch</td>
+<td>设置写观察点</td>
+</tr>
+<tr>
+<td>rwatch</td>
+<td>设置读观察点</td>
+</tr>
+<tr>
+<td>awatch</td>
+<td>设置读写观察点</td>
+</tr>
+<tr>
+<td>info watchpoints</td>
+<td>查看观察点列表</td>
+</tr>
+</tbody></table>
+<h3 id="Display跟踪点"><a href="#Display跟踪点" class="headerlink" title="Display跟踪点"></a>Display跟踪点</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>display var</td>
+<td>每次停下来时,显示设置的变量var的值</td>
+</tr>
+<tr>
+<td>undisplay</td>
+<td>取消跟踪显示</td>
+</tr>
+<tr>
+<td>info display</td>
+<td>设置读写观察点</td>
+</tr>
+<tr>
+<td>info watchpoints</td>
+<td>查看跟踪列表</td>
+</tr>
+</tbody></table>
+<h3 id="运行信息"><a href="#运行信息" class="headerlink" title="运行信息"></a>运行信息</h3><p><code>where/bt</code> ：当前运行的堆栈列表<br><code>set args</code> 参数:指定运行时的参数<br><code>show args</code>：查看设置好的参数<br><code>info program</code>： 来查看程序的是否在运行，进程号，被暂停的原因</p>
+<h3 id="TUI"><a href="#TUI" class="headerlink" title="TUI"></a>TUI</h3><p>Text User Interface<br>开启方式：</p>
+<ol>
+<li>gdb启动时添加<code>-tui</code>参数</li>
+<li>在gdb命令行执行<code>tui enable</code><br><strong>Ctrl + n，下一命令（Next）</strong><br><strong>Ctrl + p，上一命令（Prev）</strong></li>
+</ol>
+<h2 id="QEMU"><a href="#QEMU" class="headerlink" title="QEMU"></a>QEMU</h2><h3 id="进入退出monitor"><a href="#进入退出monitor" class="headerlink" title="进入退出monitor"></a>进入退出monitor</h3><p><code>C-a c</code>在console和monitor模式切换。其他命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>前缀</th>
+<th>指令</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Ctrl+a</code></td>
+<td><code>h</code></td>
+<td>help</td>
+</tr>
+<tr>
+<td><code>Ctrl+a</code></td>
+<td><code>x</code></td>
+<td>退出QEMU</td>
+</tr>
+<tr>
+<td><code>Ctrl+a</code></td>
+<td><code>c</code></td>
+<td>虚拟机和QEMU控制台切换</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>地址类<br>  i &#x2F;fmt addr – I&#x2F;O port read<br>  o &#x2F;fmt addr value – I&#x2F;O port write<br>  x &#x2F;fmt addr – virtual memory dump starting at ‘addr’<br>  xp &#x2F;fmt addr – physical memory dump starting at ‘addr’<br>  print|p &#x2F;fmt expr – print expression value (use $reg for CPU register access)</p>
+</li>
+<li><p>查询<br>  info [subcommand] – show various information about the system state</p>
+</li>
+<li><p>控制<br>  system_powerdown – send system power down event<br>  system_reset – reset the system<br>  system_wakeup – wakeup guest from suspend</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>yb.chen
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/" title="Linux编译调试相关命令">http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 命令</a>
+              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91/" rel="tag"><i class="fa fa-tag"></i> 编译</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/04/23/software/doc/linux-common-cmd/" rel="next" title="Linux常用命令">
+                  Linux常用命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">yb.chen</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">2k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+
+</body>
+</html>

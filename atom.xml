@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>yb chen&#39;s blog</title>
+  <icon>http://konui.github.io/icon.png</icon>
+  
+  <link href="http://konui.github.io/atom.xml" rel="self"/>
+  
+  <link href="http://konui.github.io/"/>
+  <updated>2025-04-23T09:05:19.980Z</updated>
+  <id>http://konui.github.io/</id>
+  
+  <author>
+    <name>yb.chen</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux常用命令</title>
+    <link href="http://konui.github.io/2025/04/23/software/doc/linux-common-cmd/"/>
+    <id>http://konui.github.io/2025/04/23/software/doc/linux-common-cmd/</id>
+    <published>2025-04-23T09:05:19.980Z</published>
+    <updated>2025-04-23T09:05:19.980Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;记录常用Linux命令的参数&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="命令" scheme="http://konui.github.io/categories/%E5%91%BD%E4%BB%A4/"/>
+    
+    
+    <category term="命令" scheme="http://konui.github.io/tags/%E5%91%BD%E4%BB%A4/"/>
+    
+    <category term="Linux" scheme="http://konui.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux编译调试相关命令</title>
+    <link href="http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/"/>
+    <id>http://konui.github.io/2024/11/19/software/doc/linux-compile-cmd/</id>
+    <published>2024-11-19T19:42:20.000Z</published>
+    <updated>2025-04-23T09:05:19.980Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;记录Linux编译调试相关命令的参数&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="命令" scheme="http://konui.github.io/categories/%E5%91%BD%E4%BB%A4/"/>
+    
+    
+    <category term="命令" scheme="http://konui.github.io/tags/%E5%91%BD%E4%BB%A4/"/>
+    
+    <category term="Linux" scheme="http://konui.github.io/tags/Linux/"/>
+    
+    <category term="编译" scheme="http://konui.github.io/tags/%E7%BC%96%E8%AF%91/"/>
+    
+  </entry>
+  
+</feed>
